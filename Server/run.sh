@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Absolute path to this script, e.g. /home/user/bin/foo.sh
-SCRIPT=$(readlink -f "$0")
-# Absolute path this script is in, thus /home/user/bin
-PATH=$(dirname "$SCRIPT")
+ls /webapps/ngj18
 
-node $PATH/main.js
+node /webapps/ngj18/main.js
