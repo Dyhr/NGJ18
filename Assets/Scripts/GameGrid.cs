@@ -49,7 +49,7 @@ public class GameGrid : MonoBehaviour {
         if (p.y < 0) {
             tMax = FallCurve.keys.Last().time;
             origin = target;
-            target += Vector3.down * 100;
+            target += Vector3.down * 50;
             for (float t = 0; t < tMax; t += Time.deltaTime) {
                 yield return null;
                 player.transform.position = Vector3.LerpUnclamped(origin, target, FallCurve.Evaluate(t));
@@ -96,8 +96,8 @@ public class GameGrid : MonoBehaviour {
 
     public IEnumerator Push(Character character) {
         foreach (var other in Physics.OverlapSphere(character.transform.position, Stride * 2)
-            .Where(c => c.transform.parent.GetComponent<Character>())
-            .Select(c => c.transform.parent.GetComponent<Character>())) {
+            .Where(c => c?.transform.parent?.GetComponent<Character>())
+            .Select(c => c?.transform.parent?.GetComponent<Character>())) {
             if(character == other) continue;
 
             StartCoroutine(Move(other, (other.transform.position - character.transform.position).normalized));
