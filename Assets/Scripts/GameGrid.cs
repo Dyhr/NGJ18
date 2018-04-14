@@ -21,31 +21,42 @@ public class GameGrid : MonoBehaviour {
 
     public IEnumerator Move(Character player, Vector3 input) {
         if (player.Moving) yield break;
-        player.Moving = true;
         
         var origin = player.transform.position;
         var target = player.transform.position + input * Stride;
         var old = Pos(origin);
         var p = Pos(target);
         if (old == p) yield break;
-        if (p.x < 0 || p.x >= Width || p.y < 0 || p.y >= Height) yield break;
+        if (p.x < 0 || p.x >= Width || p.y >= Height) yield break;
+        player.Moving = true;
 
         target.x = Mathf.Round(target.x / Stride) * Stride;
         target.z = Mathf.Round(target.z / Stride) * Stride;
-        target.y = tiles[(int) p.x, (int) p.y].Count;
+        target.y = p.y >= 0 ? tiles[(int) p.x, (int) p.y].Count : 0;
 
         foreach (var character in tiles[(int) old.x, (int) old.y].SkipWhile(c => c != player).Skip(1))
             character.StartCoroutine(Fall(character));
         
         var tMax = MoveCurve.keys.Last().time;
         tiles[(int) old.x, (int) old.y].Remove(player);
-        tiles[(int) p.x, (int) p.y].Add(player);
+        if(p.y >= 0)tiles[(int) p.x, (int) p.y].Add(player);
         for (float t = 0; t < tMax; t += Time.deltaTime) {
             yield return null;
             player.transform.position = Vector3.LerpUnclamped(origin, target, MoveCurve.Evaluate(t));
         }
-
         player.transform.position = target;
+
+        if (p.y < 0) {
+            tMax = FallCurve.keys.Last().time;
+            origin = target;
+            target += Vector3.down * 100;
+            for (float t = 0; t < tMax; t += Time.deltaTime) {
+                yield return null;
+                player.transform.position = Vector3.LerpUnclamped(origin, target, FallCurve.Evaluate(t));
+            }
+            Destroy(player.gameObject);
+        }
+
         player.Moving = false;
     }
     public IEnumerator Fall(Character player) {

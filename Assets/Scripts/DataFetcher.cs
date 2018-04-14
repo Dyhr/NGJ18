@@ -34,7 +34,7 @@ public class DataFetcher : MonoBehaviour {
                         players[action.id].Init(action);
                         Debug.LogFormat("{0} joined", action.id);
                     } else if(players.ContainsKey(action.id)) {
-                        players[action.id].Action(action);
+                        players[action.id]?.Action(action);
                     }
                 }
             }
