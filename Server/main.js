@@ -1,20 +1,47 @@
 var http = require("http");
-var server = http.createServer(function(request, response) {
+var bind = require("bind");
+var ReadWriteLock = require('rwlock');
+var lock = new ReadWriteLock();
+
+var actions = [];
+
+var action = function(request, response){
   response.writeHead(200, {"Content-Type": "text/html"});
-  response.write(" \
-  <!DOCTYPE \"html\"> \
-  <html> \
-  <head> \
-  <title>Game Controller</title> \
-  <style> \
-          \
-  </style> \
-  </head> \
-  <body> \
-  Hello World! \
-  </body> \
-  </html>");
+  response.write("thanks");
   response.end();
+
+  lock.writeLock(function(release){
+    actions.push(request.body);
+    release();
+  });
+};
+var fetch = function(request, response){
+  lock.writeLock(function(release){
+    result = actions;
+    actions = [];
+    release();
+    response.writeHead(200, {"Content-Type": "text/json"});
+    response.write(JSON.stringify({actions:result}));
+    response.end();
+  });
+};
+
+var server = http.createServer(function(request, response) {
+  if(request.url=='/') {
+    bind.toFile("./index.html", {}, function(data){
+      response.writeHead(200, {"Content-Type": "text/html"});
+      response.write(data);
+      response.end();
+    });
+  } else if(request.url=="/action/") {
+    action(request, response);
+  } else if(request.url=="/fetch/") {
+    fetch(request, response);
+  } else {
+    response.writeHead(404, {"Content-Type": "text/html"});
+    response.write("Nothing here at "+request.url);
+    response.end();
+  }
 });
 
 server.listen(80);
