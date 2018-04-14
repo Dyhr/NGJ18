@@ -6,6 +6,7 @@ public class Character : MonoBehaviour {
     public string Id;
     public string Name;
     public GameGrid Grid;
+    public bool Moving;
 
     public void Init(PlayerAction action) {
         Id = action.id;
@@ -13,6 +14,7 @@ public class Character : MonoBehaviour {
         Grid = FindObjectOfType<GameGrid>();
         
         transform.position = new Vector3(Random.Range(0,Grid.Width),0,Random.Range(0,Grid.Height)) * Grid.Stride;
+        Grid.Add(this);
     }
 
     public void Action(PlayerAction action) {
@@ -20,16 +22,16 @@ public class Character : MonoBehaviour {
 
         switch (action.name) {
             case "up":
-                Grid.Move(this, Vector3.forward);
+                StartCoroutine(Grid.Move(this, Vector3.forward));
                 break;
             case "right":
-                Grid.Move(this, Vector3.right);
+                StartCoroutine(Grid.Move(this, Vector3.right));
                 break;
             case "down":
-                Grid.Move(this, Vector3.back);
+                StartCoroutine(Grid.Move(this, Vector3.back));
                 break;
             case "left":
-                Grid.Move(this, Vector3.left);
+                StartCoroutine(Grid.Move(this, Vector3.left));
                 break;
             case "a":
                 break;

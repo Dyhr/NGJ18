@@ -156,6 +156,42 @@ MonoBehaviour:
   Width: 12
   Height: 8
   Stride: 2
+  MoveCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 3.8215706
+      outSlope: 3.8215706
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.5
+      value: 1
+      inSlope: -1.4975178
+      outSlope: -1.4975178
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  FallCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0.26014847
+      outSlope: 0.26014847
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.25
+      value: 1
+      inSlope: 9.318753
+      outSlope: 9.318753
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &808844787
 GameObject:
   m_ObjectHideFlags: 0
