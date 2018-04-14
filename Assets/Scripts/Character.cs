@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Character : MonoBehaviour {
     public string Id;
-    public float Stride;
+    public string Name;
+    public GameGrid Grid;
 
     public void Init(PlayerAction action) {
         Id = action.id;
+        Name = action.name;
+        Grid = FindObjectOfType<GameGrid>();
+        
+        transform.position = new Vector3(Random.Range(0,Grid.Width),0,Random.Range(0,Grid.Height)) * Grid.Stride;
     }
 
     public void Action(PlayerAction action) {
@@ -15,16 +20,16 @@ public class Character : MonoBehaviour {
 
         switch (action.name) {
             case "up":
-                Move(Vector3.forward);
+                Grid.Move(this, Vector3.forward);
                 break;
             case "right":
-                Move(Vector3.right);
+                Grid.Move(this, Vector3.right);
                 break;
             case "down":
-                Move(Vector3.back);
+                Grid.Move(this, Vector3.back);
                 break;
             case "left":
-                Move(Vector3.left);
+                Grid.Move(this, Vector3.left);
                 break;
             case "a":
                 break;
@@ -34,9 +39,5 @@ public class Character : MonoBehaviour {
                 Debug.LogWarning($"Unknown button: {action.name}");
                 break;
         }
-    }
-
-    public void Move(Vector3 input) {
-        transform.position += input * Stride;
     }
 }

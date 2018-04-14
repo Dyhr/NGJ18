@@ -9,6 +9,7 @@ public class DataFetcher : MonoBehaviour {
     public Character PlayerPrefab;
     
     private readonly Dictionary<string, Character> players = new Dictionary<string, Character>();
+    private bool first = true;
     
     private void Start() {
         StartCoroutine(Fetch());
@@ -21,13 +22,20 @@ public class DataFetcher : MonoBehaviour {
             if (req.isNetworkError || req.isHttpError) {
                 Debug.LogError(req.error);
             } else {
+                if (first) {
+                    first = false;
+                    continue;
+                }
+                
                 var actions = JsonUtility.FromJson<ActionList>(req.downloadHandler.text);
                 foreach (var action in actions.actions) {
                     if (action.type == "join") {
                         players[action.id] = Instantiate(PlayerPrefab);
                         players[action.id].Init(action);
+                        Debug.LogFormat("{0} joined", action.id);
+                    } else if(players.ContainsKey(action.id)) {
+                        players[action.id].Action(action);
                     }
-                    else players[action.id].Action(action);
                 }
             }
         }
