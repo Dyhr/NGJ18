@@ -5,6 +5,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class DataFetcher : MonoBehaviour {
+
+    public Character PlayerPrefab;
+    
+    private readonly Dictionary<string, Character> players = new Dictionary<string, Character>();
+    
     private void Start() {
         StartCoroutine(Fetch());
     }
@@ -18,7 +23,11 @@ public class DataFetcher : MonoBehaviour {
             } else {
                 var actions = JsonUtility.FromJson<ActionList>(req.downloadHandler.text);
                 foreach (var action in actions.actions) {
-                    Debug.Log(action);
+                    if (action.type == "join") {
+                        players[action.id] = Instantiate(PlayerPrefab);
+                        players[action.id].Init(action);
+                    }
+                    else players[action.id].Action(action);
                 }
             }
         }
