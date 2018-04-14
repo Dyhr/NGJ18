@@ -1,5 +1,4 @@
 #!/bin/bash
 
-ls /webapps/ngj18
-
+sudo apt-get install -y nodejs
 node /webapps/ngj18/main.js
