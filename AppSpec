@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: Server/main.js
+    destination: /webapps/ngj18
+  - source: Server/run.sh
+    destination: /webapps/ngj18
+hooks:
+  ApplicationStart:
+    - location: /webapps/run.sh

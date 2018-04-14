@@ -5,7 +5,10 @@ var server = http.createServer(function(request, response) {
   <!DOCTYPE \"html\">
   <html>
   <head>
-  <title>Hello World Page</title>
+  <title>Game Controller</title>
+  <style>
+
+  </style>
   </head>
   <body>
   Hello World!
