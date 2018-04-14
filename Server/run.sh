@@ -10,3 +10,8 @@ node -v
 #npm install querystring
 
 nohup node /webapps/ngj18/main.js &>/dev/null &
+
+until pids=$(pidof node)
+do
+    sleep 1
+done
