@@ -1,4 +1,5 @@
 #!/bin/bash
 
-sudo yum install -y nodejs
+sudo yum -y update
+sudo yum -y install nodejs
 node /webapps/ngj18/main.js
