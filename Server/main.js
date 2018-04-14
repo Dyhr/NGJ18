@@ -1,19 +1,29 @@
 var http = require("http");
 var bind = require("bind");
 var ReadWriteLock = require('rwlock');
-var lock = new ReadWriteLock();
+var qs = require('querystring');
 
+var lock = new ReadWriteLock();
 var actions = [];
 
 var action = function(request, response){
-  response.writeHead(200, {"Content-Type": "text/html"});
-  response.write("thanks");
-  response.end();
 
-  lock.writeLock(function(release){
-    actions.push(request.body);
-    release();
+  var body = '';
+
+  request.on('data', function (data) {
+      body += data;
   });
+
+  request.on('end', function () {
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write("thanks");
+    response.end();
+    lock.writeLock(function(release){
+      actions.push(qs.parse(body));
+      release();
+    });
+  });
+
 };
 var fetch = function(request, response){
   lock.writeLock(function(release){
