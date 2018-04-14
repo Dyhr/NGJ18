@@ -9,6 +9,7 @@ node -v
 #npm install rwlock
 #npm install querystring
 
+cd /webapps/ngj18
 nohup node /webapps/ngj18/main.js &>/tmp/serverlog.log &
 
 until pids=$(pidof node)
