@@ -15,6 +15,8 @@ public class Character : MonoBehaviour {
         
         transform.position = new Vector3(Random.Range(0,Grid.Width),0,Random.Range(0,Grid.Height)) * Grid.Stride;
         Grid.Add(this);
+        
+        GetComponentInChildren<MeshRenderer>().material.color = Color.HSVToRGB(Random.Range(0f,1f),Random.Range(.4f,.6f),Random.Range(.6f,.9f));
     }
 
     public void Action(PlayerAction action) {
@@ -36,6 +38,7 @@ public class Character : MonoBehaviour {
             case "a":
                 break;
             case "b":
+                StartCoroutine(Grid.Push(this));
                 break;
             default:
                 Debug.LogWarning($"Unknown button: {action.name}");

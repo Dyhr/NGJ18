@@ -27,8 +27,11 @@ public class GameGrid : MonoBehaviour {
         var target = player.transform.position + input * Stride;
         var old = Pos(origin);
         var p = Pos(target);
+        if (old == p) yield break;
         if (p.x < 0 || p.x >= Width || p.y < 0 || p.y >= Height) yield break;
 
+        target.x = Mathf.Round(target.x / Stride) * Stride;
+        target.z = Mathf.Round(target.z / Stride) * Stride;
         target.y = tiles[(int) p.x, (int) p.y].Count;
 
         foreach (var character in tiles[(int) old.x, (int) old.y].SkipWhile(c => c != player).Skip(1))
@@ -48,7 +51,7 @@ public class GameGrid : MonoBehaviour {
     public IEnumerator Fall(Character player) {
         if (player.Moving) yield break;
         player.Moving = true;
-
+        
         var origin = player.transform.position;
         var target = player.transform.position;
         var p = Pos(target);
@@ -78,5 +81,17 @@ public class GameGrid : MonoBehaviour {
         var p = Pos(character.transform.position);
         character.transform.position += Vector3.up * tiles[(int) p.x, (int) p.y].Count;
         tiles[(int) p.x, (int) p.y].Add(character);
+    }
+
+    public IEnumerator Push(Character character) {
+        foreach (var other in Physics.OverlapSphere(character.transform.position, Stride * 2)
+            .Where(c => c.transform.parent.GetComponent<Character>())
+            .Select(c => c.transform.parent.GetComponent<Character>())) {
+            if(character == other) continue;
+
+            StartCoroutine(Move(other, (other.transform.position - character.transform.position).normalized));
+        }
+
+        yield return null;
     }
 }
