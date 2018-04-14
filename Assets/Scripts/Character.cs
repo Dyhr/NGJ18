@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Character : MonoBehaviour {
     public string Id;
@@ -12,6 +13,9 @@ public class Character : MonoBehaviour {
         Id = action.id;
         Name = action.name;
         Grid = FindObjectOfType<GameGrid>();
+
+        name = Name;
+        GetComponentInChildren<Text>().text = name.ToUpper();
         
         transform.position = new Vector3(Random.Range(0,Grid.Width),0,Random.Range(0,Grid.Height)) * Grid.Stride;
         Grid.Add(this);
@@ -39,6 +43,8 @@ public class Character : MonoBehaviour {
                 break;
             case "b":
                 StartCoroutine(Grid.Push(this));
+                break;
+            case "join":
                 break;
             default:
                 Debug.LogWarning($"Unknown button: {action.name}");

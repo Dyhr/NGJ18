@@ -54,20 +54,31 @@ body {
     padding: 12%;
     height: auto;
 }
+.namefield {
+  margin-top: 4vw;
+  width: 80%;
+}
 </style>
 </head>
 
 <body>
 
-<div class="row">
+<div class="row join">
+  <div class="col-xs-2"></div>
+  <div class="col-xs-4"><input class="namefield" type='text' maxlength="6"></input></div>
+  <div class="col-xs-4"><button class="round-button" id="join"></button></div>
+  <div class="col-xs-2"></div>
+</div>
+
+<div class="row controls">
   <div class="col-xs-12">Your ID is <script>document.write(myId);</script></div>
 </div>
-<div class="row">
+<div class="row controls">
   <div class="col-xs-2"></div>
   <div class="col-xs-2"><button class="round-button" id="up" /></div>
   <div class="col-xs-8"></div>
 </div>
-<div class="row">
+<div class="row controls">
   <div class="col-xs-2"><button class="round-button" id="left" /></div>
   <div class="col-xs-2"></div>
   <div class="col-xs-2"><button class="round-button" id="right" /></div>
@@ -76,17 +87,22 @@ body {
   <div class="col-xs-1"></div>
   <div class="col-xs-2"><button class="round-button" id="b" /></div>
 </div>
-<div class="row">
+<div class="row controls">
   <div class="col-xs-2"></div>
   <div class="col-xs-2"><button class="round-button" id="down" /></div>
   <div class="col-xs-8"></div>
 </div>
 
 <script>
-$.post("action/", {
-  type: "join",
-  id: myId,
-  name: "",
+$(".controls").css('display','none');
+$("#join").mousedown(function(){
+  $(".controls").css('display','block');
+  $(".join").css('display','none');
+  $.post("action/", {
+    type: "join",
+    id: myId,
+    name: $(".namefield").val(),
+  });
 });
 $(".round-button").mousedown(function(){
   $.post("action/", {
