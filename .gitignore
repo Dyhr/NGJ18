@@ -165,3 +165,7 @@ sysinfo.txt
 
 
 # End of https://www.gitignore.io/api/node,unity,intellij
+
+\.idea/\.idea\.NGJ18/\.idea/
+
+\.idea/\.idea\.NGJ18/
