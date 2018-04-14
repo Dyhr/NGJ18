@@ -7,12 +7,27 @@ using UnityEngine.Networking;
 public class DataFetcher : MonoBehaviour {
 
     public Character PlayerPrefab;
+
+    public float Bpm = 120;
     
     private readonly Dictionary<string, Character> players = new Dictionary<string, Character>();
     private bool first = true;
+    private readonly Dictionary<string, PlayerAction> buffer = new Dictionary<string, PlayerAction>();
     
     private void Start() {
         StartCoroutine(Fetch());
+        StartCoroutine(Beat());
+    }
+
+    private IEnumerator Beat() {
+        yield return new WaitForSeconds(2/(Bpm/60));
+        while (true) {
+            foreach (var action in buffer)
+                players[action.Key]?.Action(action.Value);
+            buffer.Clear();
+            
+            yield return new WaitForSeconds(4/(Bpm/60));
+        }
     }
 
     private IEnumerator Fetch() {
@@ -34,7 +49,7 @@ public class DataFetcher : MonoBehaviour {
                         players[action.id].Init(action);
                         Debug.LogFormat("{0} joined", action.id);
                     } else if(players.ContainsKey(action.id)) {
-                        players[action.id]?.Action(action);
+                        buffer[action.id] = action;
                     }
                 }
             }

@@ -308,6 +308,8 @@ MonoBehaviour:
   Name: 
   Grid: {fileID: 0}
   Moving: 0
+  ArrowPrefab: {fileID: 400000, guid: cff4c024d20095a458a66e6e0d47bf1b, type: 2}
+  ArrowFlightTime: 0.3
 --- !u!114 &114193300610605332
 MonoBehaviour:
   m_ObjectHideFlags: 1

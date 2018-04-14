@@ -8,6 +8,16 @@ public class Character : MonoBehaviour {
     public string Name;
     public GameGrid Grid;
     public bool Moving;
+    
+    [Header("Settings")]
+    public Transform ArrowPrefab;
+    public float ArrowFlightTime;
+
+    private Boss boss;
+
+    private void FixedUpdate() {
+        if (boss == null) boss = FindObjectOfType<Boss>();
+    }
 
     public void Init(PlayerAction action) {
         Id = action.id;
@@ -40,6 +50,7 @@ public class Character : MonoBehaviour {
                 StartCoroutine(Grid.Move(this, Vector3.left));
                 break;
             case "a":
+                StartCoroutine(Attack());
                 break;
             case "b":
                 StartCoroutine(Grid.Push(this));
@@ -50,5 +61,22 @@ public class Character : MonoBehaviour {
                 Debug.LogWarning($"Unknown button: {action.name}");
                 break;
         }
+    }
+
+    private IEnumerator Attack() {
+        if (boss == null) yield break;
+
+        var dir = boss.transform.position - transform.position;
+        var arrow = Instantiate(ArrowPrefab, transform.position, Quaternion.LookRotation(dir) * Quaternion.Euler(0,90,0));
+
+        var origin = transform.position;
+        var target = boss.transform.position + Vector3.up * 5;
+        for (float t = 0; t < ArrowFlightTime; t += Time.deltaTime) {
+            yield return null;
+            arrow.transform.position = Vector3.LerpUnclamped(origin, target,  t/ArrowFlightTime);
+        }
+        
+        Destroy(arrow.gameObject);
+        boss.Hurt();
     }
 }

@@ -4,8 +4,6 @@ using System.Linq;
 using UnityEngine;
 
 public class Beater : MonoBehaviour {
-
-	public float Bpm = 120;
 	public AudioSource Source;
 
 	private float loudness;
