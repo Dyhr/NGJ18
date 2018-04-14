@@ -1,1 +1,1 @@
-node main.js
+node /webapps/ngj18/main.js
