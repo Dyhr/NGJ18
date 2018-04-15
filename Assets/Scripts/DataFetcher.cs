@@ -13,7 +13,7 @@ public class DataFetcher : MonoBehaviour {
     
     private readonly Dictionary<string, Character> players = new Dictionary<string, Character>();
     private bool first = true;
-    private readonly Dictionary<string, PlayerAction> buffer = new Dictionary<string, PlayerAction>();
+    public readonly Dictionary<string, PlayerAction> Buffer = new Dictionary<string, PlayerAction>();
     
     private void Start() {
         StartCoroutine(Fetch());
@@ -24,9 +24,9 @@ public class DataFetcher : MonoBehaviour {
         while (true) {
             yield return new WaitUntil(() => Beater.Loudness >= Threshold);
             
-            foreach (var action in buffer)
+            foreach (var action in Buffer)
                 players[action.Key]?.Action(action.Value);
-            buffer.Clear();
+            Buffer.Clear();
             
             yield return new WaitForSeconds(1);
         }
@@ -51,7 +51,7 @@ public class DataFetcher : MonoBehaviour {
                         players[action.id].Init(action);
                         Debug.LogFormat("{0} joined", action.id);
                     } else if(players.ContainsKey(action.id)) {
-                        buffer[action.id] = action;
+                        Buffer[action.id] = action;
                     }
                 }
             }
