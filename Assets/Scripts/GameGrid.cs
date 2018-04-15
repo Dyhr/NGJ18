@@ -21,7 +21,7 @@ public class GameGrid : MonoBehaviour {
 
     public IEnumerator Move(Character player, Vector3 input) {
         if (player.Moving) yield break;
-        
+
         var origin = player.transform.position;
         var target = player.transform.position + input * Stride;
         var old = Pos(origin);
@@ -36,14 +36,15 @@ public class GameGrid : MonoBehaviour {
 
         foreach (var character in tiles[(int) old.x, (int) old.y].SkipWhile(c => c != player).Skip(1))
             character.StartCoroutine(Fall(character));
-        
+
         var tMax = MoveCurve.keys.Last().time;
         tiles[(int) old.x, (int) old.y].Remove(player);
-        if(p.y >= 0)tiles[(int) p.x, (int) p.y].Add(player);
+        if (p.y >= 0) tiles[(int) p.x, (int) p.y].Add(player);
         for (float t = 0; t < tMax; t += Time.deltaTime) {
             yield return null;
             player.transform.position = Vector3.LerpUnclamped(origin, target, MoveCurve.Evaluate(t));
         }
+
         player.transform.position = target;
 
         if (p.y < 0) {
@@ -54,20 +55,22 @@ public class GameGrid : MonoBehaviour {
                 yield return null;
                 player.transform.position = Vector3.LerpUnclamped(origin, target, FallCurve.Evaluate(t));
             }
+
             Destroy(player.gameObject);
         }
 
         player.Moving = false;
     }
+
     public IEnumerator Fall(Character player) {
         if (player.Moving) yield break;
         player.Moving = true;
-        
+
         var origin = player.transform.position;
         var target = player.transform.position;
         var p = Pos(target);
-        target.y = tiles[(int) p.x, (int) p.y].IndexOf(player)-1;
-        
+        target.y = tiles[(int) p.x, (int) p.y].IndexOf(player) - 1;
+
         var tMax = FallCurve.keys.Last().time;
         for (float t = 0; t < tMax; t += Time.deltaTime) {
             yield return null;
@@ -98,11 +101,37 @@ public class GameGrid : MonoBehaviour {
         foreach (var other in Physics.OverlapSphere(character.transform.position, Stride * 2)
             .Where(c => c?.transform.parent?.GetComponent<Character>())
             .Select(c => c?.transform.parent?.GetComponent<Character>())) {
-            if(character == other) continue;
+            if (character == other || other == null) continue;
 
             StartCoroutine(Move(other, (other.transform.position - character.transform.position).normalized));
         }
 
         yield return null;
+    }
+
+    public Vector3? RandomPopulated() {
+        var possible = new List<Vector3>();
+        for (var x = 0; x < Width; x++)
+        for (var y = 0; y < Height; y++)
+        for (var i = 0; i < tiles[x, y].Count; i++)
+            possible.Add(new Vector3(x * Stride, 0, y * Stride));
+
+        if (possible.Count == 0) return null;
+
+        return possible[Random.Range(0, possible.Count)];
+    }
+
+    public IEnumerable<Vector3> Positions() {
+        for (var x = 0; x < Width; x++)
+        for (var y = 0; y < Height; y++)
+            yield return new Vector3(x * Stride, 0, y * Stride);
+    }
+
+    public IEnumerable<Character> InRange(Vector3 pos, float dist) {
+        for (var x = 0; x < Width; x++)
+        for (var y = 0; y < Height; y++)
+            if (Vector3.Distance(pos, new Vector3(x * Stride, 0, y * Stride)) < dist)
+                foreach (var character in tiles[x, y])
+                    yield return character;
     }
 }

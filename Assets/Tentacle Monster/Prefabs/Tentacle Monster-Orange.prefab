@@ -4736,6 +4736,12 @@ MonoBehaviour:
   Health: 10
   Dead: 0
   Minions: []
+  FirePrefab: {fileID: 4399610403064566, guid: 53bd92e36f024dd4b9feff9e89f1472e, type: 2}
+  ExplosionPrefab: {fileID: 4138624028917078, guid: 39c8ab3f874c70b4182ab779145c66b0,
+    type: 2}
+  DangerPrefab: {fileID: 4818212374207376, guid: f7629115081d510499276c652d1dc95a,
+    type: 2}
+  FireFlightTime: 1
 --- !u!114 &114495904079894188
 MonoBehaviour:
   m_ObjectHideFlags: 1
