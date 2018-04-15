@@ -20,12 +20,15 @@ public class BossSpawner : MonoBehaviour {
 
 	private IEnumerator Spawn() {
 		Debug.Log("Starting...");
-		Instantiate(BossPrefab, transform.position, Quaternion.Euler(0,180,0));
+		var boss = Instantiate(BossPrefab, transform.position, Quaternion.Euler(0,180,0));
 
 		for (int i = 0; i < NumberOfMinions; i++) {
 			yield return new WaitForSeconds(Random.Range(0.1f,0.4f));
-			Instantiate(MinionPrefab, transform.position + new Vector3(Random.Range(-8f,8f),0,Random.Range(-2f,3f)),
-				Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+			boss.GetComponent<Boss>().Minions.Add(
+				Instantiate(
+					MinionPrefab, 
+					transform.position + new Vector3(Random.Range(-8f,8f),0,Random.Range(-2f,3f)),
+					Quaternion.Euler(0, Random.Range(0f, 360f), 0)));
 		}
 			
 		Destroy(this);

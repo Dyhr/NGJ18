@@ -24,7 +24,7 @@ public class Beater : MonoBehaviour {
 	    if (!(Time.time - lastUpdate >= updateStep)) return;
 	    
 	    lastUpdate = Time.time;
-	    Source.clip.GetData(clipData, Source.timeSamples); //I read 1024 samples, which is about 80 ms on a 44khz stereo clip, beginning at the current sample position of the clip.
+	    Source.clip.GetData(clipData, Source.timeSamples);
 	    loudness = clipData.Average(sample => Mathf.Abs(sample));
 
 	    transform.localScale = Vector3.one * (.5f + loudness);
