@@ -8,6 +8,7 @@ public class BossSpawner : MonoBehaviour {
 	public GameObject MinionPrefab;
 
 	public int NumberOfMinions;
+	public Boss Boss;
 
 	private bool spawning;
 	
@@ -21,6 +22,7 @@ public class BossSpawner : MonoBehaviour {
 	private IEnumerator Spawn() {
 		Debug.Log("Starting...");
 		var boss = Instantiate(BossPrefab, transform.position, Quaternion.Euler(0,180,0));
+		Boss = boss.GetComponent<Boss>();
 
 		for (int i = 0; i < NumberOfMinions; i++) {
 			yield return new WaitForSeconds(Random.Range(0.1f,0.4f));
@@ -30,7 +32,5 @@ public class BossSpawner : MonoBehaviour {
 					transform.position + new Vector3(Random.Range(-8f,8f),0,Random.Range(-2f,3f)),
 					Quaternion.Euler(0, Random.Range(0f, 360f), 0)));
 		}
-			
-		Destroy(this);
 	}
 }

@@ -6552,7 +6552,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 114025358135033424, guid: aaf4f1a0fd83b8e4e80814d5181ed3a4,
     type: 2}
-  Bpm: 120
+  Threshold: 0.5
+  Beater: {fileID: 582292748}
 --- !u!4 &1134046570
 Transform:
   m_ObjectHideFlags: 0

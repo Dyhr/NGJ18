@@ -28,7 +28,6 @@ public class Boss : MonoBehaviour {
         health -= 1;
 
         if (health <= 0) StartCoroutine(Die());
-        Debug.Log(health);
     }
 
     private IEnumerator Die() {

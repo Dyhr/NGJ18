@@ -8,7 +8,8 @@ public class DataFetcher : MonoBehaviour {
 
     public Character PlayerPrefab;
 
-    public float Bpm = 120;
+    public float Threshold = .8f;
+    public Beater Beater;
     
     private readonly Dictionary<string, Character> players = new Dictionary<string, Character>();
     private bool first = true;
@@ -20,13 +21,14 @@ public class DataFetcher : MonoBehaviour {
     }
 
     private IEnumerator Beat() {
-        yield return new WaitForSeconds(2/(Bpm/60));
         while (true) {
+            yield return new WaitUntil(() => Beater.Loudness >= Threshold);
+            
             foreach (var action in buffer)
                 players[action.Key]?.Action(action.Value);
             buffer.Clear();
             
-            yield return new WaitForSeconds(4/(Bpm/60));
+            yield return new WaitForSeconds(1);
         }
     }
 

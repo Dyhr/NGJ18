@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tree : MonoBehaviour {
 
 	public Beater Beat;
-	public Boss Boss;
+	public BossSpawner Boss;
 
 	private Vector3 scale;
 	private float beatFactor;
@@ -27,10 +27,10 @@ public class Tree : MonoBehaviour {
 			return;
 		}
 		if (Boss == null) {
-			Boss = FindObjectOfType<Boss>();
+			Boss = FindObjectOfType<BossSpawner>();
 			return;
 		}
-		if (Boss.Dead) return;
+		if (Boss.Boss == null || Boss.Boss.Dead) return;
 
 		transform.localScale = scale + Vector3.one * Beat.Loudness * 0.15f * beatFactor;
 		transform.localRotation *= Quaternion.Euler(0,Beat.Loudness * 10f * beatFactor,0);
