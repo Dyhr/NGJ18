@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -24,7 +25,7 @@ public class DataFetcher : MonoBehaviour {
         while (true) {
             yield return new WaitUntil(() => Beater.Loudness >= Threshold);
             
-            foreach (var action in Buffer)
+            foreach (var action in Buffer.Where(pair => players[pair.Key] != null))
                 players[action.Key]?.Action(action.Value);
             Buffer.Clear();
             

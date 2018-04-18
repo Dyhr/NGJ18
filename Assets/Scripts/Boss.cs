@@ -27,7 +27,7 @@ public class Boss : MonoBehaviour {
     private void Start() {
         spawnTime = Time.time;
         ExpectedDeathTime += Time.time;
-        health = Health;
+        health = Health = FindObjectsOfType<Character>().Length * 10;
 
         StartCoroutine(Attack());
     }
@@ -35,6 +35,10 @@ public class Boss : MonoBehaviour {
     private IEnumerator Attack() {
         var fetcher = FindObjectOfType<DataFetcher>();
         var grid = FindObjectOfType<GameGrid>();
+        
+        yield return new WaitForSeconds(5);
+        yield return new WaitUntil(() => fetcher.Beater.Loudness >= fetcher.Threshold);
+        
         while (!Dead) {
             var targets = new List<Vector3>();
             for (var i = 0; i < 2; i++) {
